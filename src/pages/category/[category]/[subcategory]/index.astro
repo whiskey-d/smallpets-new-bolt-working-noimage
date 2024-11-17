@@ -1,0 +1,18 @@
+---
+import { categories } from '../../../../lib/categories';
+
+export function getStaticPaths() {
+  return Object.entries(categories).flatMap(([categorySlug, category]) =>
+    category.subcategories.map(subcategory => ({
+      params: { 
+        category: categorySlug, 
+        subcategory: subcategory.slug 
+      }
+    }))
+  );
+}
+
+export function GET({ params, redirect }) {
+  return redirect(`/category/${params.category}/${params.subcategory}`);
+}
+---

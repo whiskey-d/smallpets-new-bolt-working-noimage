@@ -1,0 +1,16 @@
+---
+export function getStaticPaths() {
+  return [
+    { params: { category: 'beds-furniture' } },
+    { params: { category: 'toys-entertainment' } },
+    { params: { category: 'grooming-care' } },
+    { params: { category: 'clothing' } },
+    { params: { category: 'training' } },
+    { params: { category: 'health-wellness' } }
+  ];
+}
+
+export function GET({ params, redirect }) {
+  return redirect(`/category/${params.category}`);
+}
+---

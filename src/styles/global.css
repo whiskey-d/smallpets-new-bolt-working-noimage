@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-primary: #F97316;
+  --color-primary-light: #FDBA74;
+  --color-primary-dark: #EA580C;
+  --color-accent-green: #86efac;
+}
+
+html, body {
+  height: 100%;
+  background-color: #f9fafb;
+}
+
+.nav-link {
+  @apply text-gray-600 hover:text-gray-900 transition-colors duration-200;
+}
+
+.nav-link.active {
+  @apply text-gray-900 bg-accent-green rounded-t-lg;
+}
+
+.dropdown-menu {
+  @apply absolute left-0 w-64 bg-white border border-gray-100 rounded-b-lg shadow-lg z-50 hidden group-hover:block;
+}
+
+.product-card {
+  @apply bg-white rounded-lg shadow-sm overflow-hidden transition-shadow duration-200 hover:shadow-md;
+}

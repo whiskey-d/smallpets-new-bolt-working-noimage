@@ -1,0 +1,41 @@
+---
+const benefits = [
+  {
+    title: 'Amazon Prime Shipping',
+    description: 'Fast, free delivery with Prime',
+    icon: 'cart'
+  },
+  {
+    title: 'Secure Shopping',
+    description: "Protected by Amazon's guarantee",
+    icon: 'shield'
+  },
+  {
+    title: 'Easy Returns',
+    description: 'Hassle-free return policy',
+    icon: 'return'
+  },
+  {
+    title: 'Tracked Delivery',
+    description: 'Real-time delivery updates',
+    icon: 'truck'
+  }
+];
+---
+
+<section class="py-12 bg-gray-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h2 class="text-2xl font-bold text-gray-900 text-center mb-12">Why Shop With Us</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      {benefits.map(benefit => (
+        <div class="text-center">
+          <div class="inline-block p-3 bg-primary/10 rounded-full text-primary mb-4">
+            <span class="text-3xl">🛒</span>
+          </div>
+          <h3 class="text-lg font-semibold mb-2">{benefit.title}</h3>
+          <p class="text-gray-600">{benefit.description}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

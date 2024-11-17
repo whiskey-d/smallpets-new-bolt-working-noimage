@@ -1,0 +1,63 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ProductGrid from '../../components/ProductGrid.astro';
+import { products } from '../../lib/products';
+import { categories } from '../../lib/categories';
+
+export function getStaticPaths() {
+  return Object.entries(categories).map(([slug, category]) => ({
+    params: { slug },
+    props: { categoryInfo: category }
+  }));
+}
+
+const { slug } = Astro.params;
+const { categoryInfo } = Astro.props;
+
+const categoryProducts = products.filter(p => 
+  p.category.toLowerCase() === categoryInfo.title.toLowerCase()
+).slice(0, 12);
+
+const breadcrumbs = [
+  { name: 'Home', href: '/' },
+  { name: categoryInfo.title, href: '#' }
+];
+---
+
+<Layout 
+  title={`${categoryInfo.title} for Small Dogs`}
+  description={`Find the best ${categoryInfo.title.toLowerCase()} for your small dog. Quality products selected specifically for small breeds.`}
+>
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <!-- Breadcrumbs -->
+    <nav class="mb-8">
+      <ol class="flex items-center space-x-2 text-sm">
+        {breadcrumbs.map((item, index) => (
+          <li class="flex items-center">
+            {index > 0 && <span class="mx-2 text-gray-400">/</span>}
+            {item.href === '#' ? (
+              <span class="text-gray-900 font-medium">{item.name}</span>
+            ) : (
+              <a href={item.href} class="text-primary hover:text-primary-dark">
+                {item.name}
+              </a>
+            )}
+          </li>
+        ))}
+      </ol>
+    </nav>
+
+    <!-- Category Header -->
+    <div class="mb-12">
+      <h1 class="text-4xl font-bold text-gray-900 mb-4">{categoryInfo.title}</h1>
+      <p class="text-lg text-gray-600">{categoryInfo.description}</p>
+    </div>
+
+    <!-- Products Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      {categoryProducts.map(product => (
+        <ProductCard product={product} />
+      ))}
+    </div>
+  </main>
+</Layout>

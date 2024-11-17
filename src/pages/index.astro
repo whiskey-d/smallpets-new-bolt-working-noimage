@@ -1,0 +1,63 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ProductCard from '../components/ProductCard.astro';
+import CategoryCard from '../components/CategoryCard.astro';
+import SearchBar from '../components/SearchBar.astro';
+import WhyShopWithUs from '../components/WhyShopWithUs.astro';
+import CustomerReviews from '../components/CustomerReviews.astro';
+import { products } from '../lib/products';
+
+const categories = [
+  { name: 'Beds & Furniture', slug: 'beds-furniture', description: 'Comfortable beds and furniture for small dogs', icon: 'bed' },
+  { name: 'Toys & Entertainment', slug: 'toys', description: 'Fun toys for small dogs', icon: 'puzzle' },
+  { name: 'Grooming & Care', slug: 'grooming', description: 'Grooming essentials for small dogs', icon: 'scissors' },
+  { name: 'Clothing & Accessories', slug: 'clothing', description: 'Stylish clothing for small dogs', icon: 'clothing' },
+  { name: 'Training & Behavior', slug: 'training', description: 'Training tools and aids', icon: 'training' },
+  { name: 'Health & Wellness', slug: 'health', description: 'Health products for small dogs', icon: 'health' }
+];
+---
+
+<Layout title="Small Dog Essentials - The Best Products for Your Little Friend">
+  <main>
+    <!-- Hero Section -->
+    <section class="bg-gray-50 py-12 md:py-20">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+          Find the Perfect Products for Your Small Dog
+        </h1>
+        <p class="text-lg text-gray-600 mb-8">
+          Discover top-rated beds, toys, and grooming essentials tailored for small dogs.
+        </p>
+        <SearchBar />
+      </div>
+    </section>
+
+    <!-- Popular Categories -->
+    <section class="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-2xl font-bold text-gray-900 mb-8">Popular Categories</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {categories.map(category => (
+          <CategoryCard category={category} />
+        ))}
+      </div>
+    </section>
+
+    <!-- Today's Best Deals -->
+    <section class="py-12 bg-gray-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-2xl font-bold text-gray-900 mb-8">Today's Best Deals</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {products.map(product => (
+            <ProductCard product={product} />
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Why Shop With Us -->
+    <WhyShopWithUs />
+
+    <!-- Customer Reviews -->
+    <CustomerReviews />
+  </main>
+</Layout>

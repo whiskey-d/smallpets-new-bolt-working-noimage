@@ -1,0 +1,27 @@
+---
+interface Props {
+  categories: {
+    name: string;
+    slug: string;
+  }[];
+}
+
+const { categories } = Astro.props;
+---
+
+<nav class="bg-white shadow-sm">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <ul class="flex flex-wrap justify-center gap-8 py-4">
+      {categories.map(category => (
+        <li>
+          <a 
+            href={`/category/${category.slug}`}
+            class="text-gray-600 hover:text-gray-900 text-sm font-medium"
+          >
+            {category.name}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</nav>

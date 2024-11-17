@@ -1,0 +1,93 @@
+---
+import { categories } from '../lib/categories';
+
+const currentPath = Astro.url.pathname;
+---
+
+<header class="border-b border-gray-100">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-16">
+      <a href="/" class="text-[#F97316] text-xl font-semibold">Small Dog Essentials</a>
+      <nav class="hidden md:flex space-x-8">
+        <a href="/about" class="text-gray-600 hover:text-gray-900">About</a>
+        <a href="/blog" class="text-gray-600 hover:text-gray-900">Blog</a>
+        <a href="/contact" class="text-gray-600 hover:text-gray-900">Contact</a>
+      </nav>
+    </div>
+  </div>
+
+  <nav class="bg-white border-t border-gray-100">
+    <div class="max-w-7xl mx-auto">
+      <ul class="flex justify-between px-4">
+        {Object.entries(categories).map(([slug, category]) => {
+          const isActive = currentPath.startsWith(`/category/${slug}`);
+          return (
+            <li class="group relative">
+              <a
+                href={`/category/${slug}/1`}
+                class={`inline-flex items-center px-4 py-4 text-sm font-medium hover:text-gray-900 relative
+                  ${isActive ? 'text-gray-900 bg-[#86efac] rounded-t-lg' : 'text-gray-600'}`}
+              >
+                {category.title}
+                <svg
+                  class="ml-1 w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </a>
+
+              <div class="hidden group-hover:block absolute left-0 w-64 bg-white border border-gray-100 rounded-b-lg shadow-lg z-50">
+                {category.subcategories.map((sub) => (
+                  <a
+                    href={`/category/${slug}/${sub.slug}/1`}
+                    class="block px-4 py-3 hover:bg-gray-50"
+                  >
+                    <div class="font-medium text-gray-900">{sub.name}</div>
+                    <div class="text-sm text-gray-600">{sub.description}</div>
+                  </a>
+                ))}
+              </div>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  </nav>
+</header>
+
+<script>
+  // Add client-side navigation enhancement
+  document.addEventListener('astro:page-load', () => {
+    const links = document.querySelectorAll('a[href^="/category/"]');
+    links.forEach(link => {
+      link.addEventListener('click', (e) => {
+        const href = (e.currentTarget as HTMLAnchorElement).href;
+        window.location.href = href;
+      });
+    });
+  });
+</script>
+
+<style>
+  nav a {
+    transition: all 0.2s ease-in-out;
+  }
+
+  .group:hover .hidden {
+    display: block;
+    animation: fadeIn 0.2s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>

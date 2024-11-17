@@ -1,0 +1,62 @@
+---
+interface Props {
+  showSort?: boolean;
+  showFilters?: boolean;
+}
+
+const { showSort = true, showFilters = true } = Astro.props;
+---
+
+<div class="bg-white p-4 rounded-lg shadow-sm mb-6">
+  <div class="flex items-center justify-between">
+    <div class="flex items-center space-x-4">
+      {showSort && (
+        <select class="rounded-md border-gray-300 text-sm focus:ring-primary focus:border-primary">
+          <option value="">Sort by</option>
+          <option value="price-asc">Price: Low to High</option>
+          <option value="price-desc">Price: High to Low</option>
+          <option value="rating">Best Rating</option>
+          <option value="reviews">Most Reviews</option>
+        </select>
+      )}
+      
+      {showFilters && (
+        <select class="rounded-md border-gray-300 text-sm focus:ring-primary focus:border-primary">
+          <option value="">Price Range</option>
+          <option value="0-25">Under $25</option>
+          <option value="25-50">$25 - $50</option>
+          <option value="50-100">$50 - $100</option>
+          <option value="100+">Over $100</option>
+        </select>
+      )}
+
+      {showFilters && (
+        <select class="rounded-md border-gray-300 text-sm focus:ring-primary focus:border-primary">
+          <option value="">Rating</option>
+          <option value="4">4+ Stars</option>
+          <option value="3">3+ Stars</option>
+          <option value="2">2+ Stars</option>
+        </select>
+      )}
+    </div>
+  </div>
+</div>
+
+<script>
+  const selects = document.querySelectorAll('select');
+  selects.forEach(select => {
+    select.addEventListener('change', (e) => {
+      const target = e.target as HTMLSelectElement;
+      const value = target.value;
+      const searchParams = new URLSearchParams(window.location.search);
+      
+      if (value) {
+        searchParams.set(target.name || 'sort', value);
+      } else {
+        searchParams.delete(target.name || 'sort');
+      }
+      
+      window.location.search = searchParams.toString();
+    });
+  });
+</script>

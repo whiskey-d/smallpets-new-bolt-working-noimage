@@ -1,0 +1,96 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import ProductCard from '../../../components/ProductCard.astro';
+import FilterBar from '../../../components/FilterBar.astro';
+import Pagination from '../../../components/Pagination.astro';
+import { categories } from '../../../lib/categories';
+import { getProductsByCategory } from '../../../lib/products';
+
+export function getStaticPaths({ paginate }) {
+  const paths = [];
+  
+  Object.entries(categories).forEach(([categorySlug, category]) => {
+    category.subcategories.forEach(subcategory => {
+      const products = getProductsByCategory(category.title).filter(p => 
+        p.subcategory?.toLowerCase() === subcategory.name.toLowerCase()
+      );
+      
+      const paginatedPaths = paginate(products, {
+        params: { 
+          category: categorySlug, 
+          subcategory: subcategory.slug 
+        },
+        pageSize: 24,
+        props: { 
+          categoryInfo: category,
+          subcategoryInfo: subcategory
+        }
+      });
+      
+      paths.push(...paginatedPaths);
+    });
+  });
+  
+  return paths;
+}
+
+const { page } = Astro.props;
+const { category } = Astro.params;
+const { categoryInfo, subcategoryInfo } = Astro.props;
+
+const breadcrumbs = [
+  { name: 'Home', href: '/' },
+  { name: categoryInfo.title, href: `/category/${category}` },
+  { name: subcategoryInfo.name, href: '#' }
+];
+
+const baseUrl = `/category/${category}/${subcategoryInfo.slug}/`;
+---
+
+<Layout 
+  title={`${subcategoryInfo.name} for Small Dogs - Page ${page.currentPage}`}
+  description={subcategoryInfo.description}
+>
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <!-- Breadcrumbs -->
+    <nav class="mb-8">
+      <ol class="flex items-center space-x-2 text-sm">
+        {breadcrumbs.map((item, index) => (
+          <li class="flex items-center">
+            {index > 0 && <span class="mx-2 text-gray-400">/</span>}
+            {item.href === '#' ? (
+              <span class="text-gray-900 font-medium">{item.name}</span>
+            ) : (
+              <a href={item.href} class="text-primary hover:text-primary-dark">
+                {item.name}
+              </a>
+            )}
+          </li>
+        ))}
+      </ol>
+    </nav>
+
+    <!-- Category Header -->
+    <div class="mb-12">
+      <h1 class="text-4xl font-bold text-gray-900 mb-4">{subcategoryInfo.name}</h1>
+      <p class="text-lg text-gray-600">{subcategoryInfo.description}</p>
+    </div>
+
+    <!-- Filter Bar -->
+    <FilterBar />
+
+    <!-- Products Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      {page.data.map(product => (
+        <ProductCard product={product} />
+      ))}
+    </div>
+
+    <!-- Pagination -->
+    <Pagination
+      currentPage={page.currentPage}
+      totalPages={page.lastPage}
+      baseUrl={baseUrl}
+    />
+  </main>
+</Layout>
